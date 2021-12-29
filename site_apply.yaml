@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  generation: 1
+  labels:
+    run: mysite2
+  name: mysite2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: mysite2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: mysite2
+    spec:
+      containers:
+      - image:
+icr.io/myspace/mysite2:1
+        imagePullPolicy: Always
+        name: mysite2
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+      - name: icr
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
